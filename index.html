@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unit 3 Teenagers – Interactive Practice</title>
+<style>
+:root{--blue:#2563eb;--blue2:#dbeafe;--green:#16a34a;--green2:#dcfce7;--red:#dc2626;--red2:#fee2e2;--ink:#172033;--muted:#64748b;--bg:#f3f6fb;--card:#fff;--border:#dbe3ef;--purple:#7c3aed}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
+.wrap{max-width:1150px;margin:auto;padding:14px} header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:28px;border-radius:22px;margin-bottom:14px;box-shadow:0 12px 35px #1e3a8a22}
+h1{margin:0 0 5px;font-size:30px} header p{margin:4px 0;opacity:.95}
+.nav{position:sticky;top:0;z-index:10;background:#fffffff0;padding:9px 0;display:flex;gap:7px;overflow:auto;white-space:nowrap}
+.nav a{text-decoration:none;background:var(--blue2);color:#1e40af;padding:7px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.section{background:var(--card);border:1px solid var(--border);border-radius:19px;padding:20px;margin:16px 0;box-shadow:0 5px 18px #0f172a0a}
+h2{margin:0 0 7px;color:#1d4ed8;font-size:22px} h3{color:#334155} .instruction{color:var(--muted);font-style:italic}
+.q{border:1px solid var(--border);border-radius:15px;padding:14px;margin:11px 0;background:#fbfdff} .q.correct{background:#f0fdf4;border-color:#86efac} .q.wrong{background:#fff7f7;border-color:#fca5a5}
+.qtitle{font-weight:700;margin-bottom:8px} .opt{display:block;padding:8px 9px;border-radius:10px;cursor:pointer} .opt:hover{background:#f1f5f9}
+.check{border:0;background:var(--blue);color:#fff;padding:10px 15px;border-radius:11px;font-weight:700;cursor:pointer;margin-top:8px}
+.score{display:inline-block;margin:8px 0 0 8px;padding:7px 10px;border-radius:9px;background:var(--blue2);color:#1e40af;font-weight:700}
+.feedback{display:none;margin-top:9px;padding:10px 12px;border-radius:10px} .feedback.show{display:block} .feedback.ok{background:var(--green2);color:#166534} .feedback.no{background:var(--red2);color:#991b1b}
+.textans{width:min(100%,650px);padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px}
+.words{display:grid;grid-template-columns:repeat(4,1fr);gap:9px} .wordrow{display:flex;align-items:center;gap:7px;padding:9px;border:1px solid var(--border);border-radius:10px;background:#f8fafc}
+.speak{border:0;background:#e0e7ff;color:#3730a3;border-radius:8px;padding:5px 8px;cursor:pointer;font-size:16px}
+.word{font-weight:700} .wordbox{background:#f8fafc;border:1px solid var(--border);padding:12px;border-radius:12px;margin-bottom:12px}
+.passage,.reading{border-radius:14px;padding:15px;border:1px solid var(--border)} .passage{background:#f8fbff}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px} .en{background:#f8fbff} .vi{background:#fffaf0}
+pre{white-space:pre-wrap;font:inherit;margin:0} details{margin-top:12px;background:#f8fafc;padding:10px;border-radius:10px}
+.final{position:fixed;right:15px;bottom:15px;background:#111827;color:white;padding:10px 14px;border-radius:13px;font-weight:700;box-shadow:0 10px 30px #0003}
+@media(max-width:760px){.wrap{padding:8px}header{padding:20px 16px;border-radius:16px}h1{font-size:24px}.section{padding:14px;border-radius:15px}.pair{grid-template-columns:1fr}.words{grid-template-columns:repeat(2,1fr)}.final{right:8px;bottom:8px;font-size:13px}}
+
+/* Pronunciation */
+.pron-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pron-option{border:2px solid var(--border);border-radius:12px;padding:10px 8px;
+  background:#f8fbff;display:flex;align-items:center;gap:7px;cursor:pointer}
+.pron-option:hover{border-color:#60a5fa}
+.pron-option.selected{border-color:#16a34a;background:#f0fdf4}
+.pron-word{font-size:18px;font-weight:600;flex:1}
+.pron-target{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px}
+.speaker-btn{border:0;border-radius:50%;width:36px;height:36px;cursor:pointer;
+  background:#e0f2fe;font-size:18px;flex:none}
+.speaker-btn:hover{background:#bae6fd}
+@media(max-width:700px){.pron-options{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.pron-options{grid-template-columns:1fr}}
+
+
+.reading-box{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+.reading-box .reading{padding:16px;border-radius:14px;line-height:1.7}
+.reading-box .en{background:#f7fbff;border:1px solid #d8e8f5}
+.reading-box .vi{background:#fffaf0;border:1px solid #eadfc8}
+.blank{display:inline-block;min-width:70px;text-align:center;font-weight:700;color:#b42318;border-bottom:2px dashed #b42318}
+@media(max-width:700px){.reading-box{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Unit 3 – Teenagers</h1><p><b>Interactive English Practice</b></p><p>Chấm điểm từng phần · Giải thích chi tiết bằng tiếng Việt · 🔊 Loa đọc từ · Bài đọc + bản dịch · Mobile friendly</p></header>
+<div class="nav">
+<a href="#pron">Pronunciation</a><a href="#phrases">Vocabulary</a><a href="#cloze">Cloze</a><a href="#reading1">Reading</a><a href="#bullet">Bulletin</a><a href="#write">Writing</a><a href="#para">Paraphrase</a>
+</div>
+<section id="pron" class="section">
+<h2>1. Pronunciation</h2>
+<p class="instruction">Choose the word in which the underlined part is pronounced differently.</p>
+<p>🔊 <b>Click the speaker next to each word to hear its pronunciation.</b></p>
+
+<div class="q" id="pron-0">
+<div class="qtitle">1. Choose the word with a different pronunciation.</div>
+<div class="pron-options">
+<label class="pron-option"><input type="radio" name="pron0" value="A"> <b>A.</b><span class="pron-word">venture</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('venture')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron0" value="B"> <b>B.</b><span class="pron-word">future</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('future')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron0" value="C"> <b>C.</b><span class="pron-word">mature</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('mature')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron0" value="D"> <b>D.</b><span class="pron-word">culture</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('culture')">🔊</button></label>
+</div><div class="feedback"></div></div>
+
+<div class="q" id="pron-1">
+<div class="qtitle">2. Choose the word with a different pronunciation.</div>
+<div class="pron-options">
+<label class="pron-option"><input type="radio" name="pron1" value="A"> <b>A.</b><span class="pron-word">tour</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('tour')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron1" value="B"> <b>B.</b><span class="pron-word">scour</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('scour')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron1" value="C"> <b>C.</b><span class="pron-word">hour</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('hour')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron1" value="D"> <b>D.</b><span class="pron-word">sour</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('sour')">🔊</button></label>
+</div><div class="feedback"></div></div>
+
+<div class="q" id="pron-2">
+<div class="qtitle">3. Choose the word with a different pronunciation.</div>
+<div class="pron-options">
+<label class="pron-option"><input type="radio" name="pron2" value="A"> <b>A.</b><span class="pron-word">curious</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('curious')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron2" value="B"> <b>B.</b><span class="pron-word">plural</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('plural')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron2" value="C"> <b>C.</b><span class="pron-word">during</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('during')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron2" value="D"> <b>D.</b><span class="pron-word">pure</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('pure')">🔊</button></label>
+</div><div class="feedback"></div></div>
+
+<div class="q" id="pron-3">
+<div class="qtitle">4. Choose the word with a different pronunciation.</div>
+<div class="pron-options">
+<label class="pron-option"><input type="radio" name="pron3" value="A"> <b>A.</b><span class="pron-word">soil</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('soil')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron3" value="B"> <b>B.</b><span class="pron-word">hoist</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('hoist')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron3" value="C"> <b>C.</b><span class="pron-word">choir</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('choir')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron3" value="D"> <b>D.</b><span class="pron-word">voice</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('voice')">🔊</button></label>
+</div><div class="feedback"></div></div>
+
+<div class="q" id="pron-4">
+<div class="qtitle">5. Choose the word with a different pronunciation.</div>
+<div class="pron-options">
+<label class="pron-option"><input type="radio" name="pron4" value="A"> <b>A.</b><span class="pron-word">endure</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('endure')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron4" value="B"> <b>B.</b><span class="pron-word">fury</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('fury')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron4" value="C"> <b>C.</b><span class="pron-word">cure</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('cure')">🔊</button></label>
+<label class="pron-option"><input type="radio" name="pron4" value="D"> <b>D.</b><span class="pron-word">bury</span><button type="button" class="speaker-btn" onclick="event.stopPropagation();speakWord('bury')">🔊</button></label>
+</div><div class="feedback"></div></div>
+
+<button class="check" onclick="checkMC('pron',['C','A','B','C','D'],'pronScore',[
+'C. <b>mature</b> has the /ʊə/ sound in the underlined part; the other words have /ə/.',
+'A. <b>tour</b> is pronounced /ʊə/, while <b>scour, hour, sour</b> have /aʊ/.',
+'B. <b>plural</b> has /ʊ/ in the underlined part; the other words in this exercise have /ʊə/.',
+'C. <b>choir</b> is pronounced /aɪ/, while <b>soil, hoist, voice</b> have /ɔɪ/.',
+'D. <b>bury</b> has /e/, while <b>endure, fury, cure</b> have /ʊə/.'
+])">Check Answers</button>
+<span class="score" id="pronScore">Score: 0 / 5</span>
+</section>
+<section id="phrases" class="section">
+<h2>2. Vocabulary – Collocations</h2><p class="instruction">Choose the correct option to complete each phrase.</p>
+<div class="q" id="phr-0">
+      <div class="qtitle">1. <b>upload</b></div>
+      <label class="opt"><input type="radio" name="phr0" value="A"> <b>A.</b> a website</label><label class="opt"><input type="radio" name="phr0" value="B"> <b>B.</b> a post</label><label class="opt"><input type="radio" name="phr0" value="C"> <b>C.</b> an account</label><label class="opt"><input type="radio" name="phr0" value="D"> <b>D.</b> a forum</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="phr-1">
+      <div class="qtitle">2. <b>browse</b></div>
+      <label class="opt"><input type="radio" name="phr1" value="A"> <b>A.</b> a post</label><label class="opt"><input type="radio" name="phr1" value="B"> <b>B.</b> a picture</label><label class="opt"><input type="radio" name="phr1" value="C"> <b>C.</b> a clip</label><label class="opt"><input type="radio" name="phr1" value="D"> <b>D.</b> a website</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="phr-2">
+      <div class="qtitle">3. <b>check</b></div>
+      <label class="opt"><input type="radio" name="phr2" value="A"> <b>A.</b> a clip</label><label class="opt"><input type="radio" name="phr2" value="B"> <b>B.</b> a notification</label><label class="opt"><input type="radio" name="phr2" value="C"> <b>C.</b> a picture</label><label class="opt"><input type="radio" name="phr2" value="D"> <b>D.</b> a forum</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="phr-3">
+      <div class="qtitle">4. <b>log on</b></div>
+      <label class="opt"><input type="radio" name="phr3" value="A"> <b>A.</b> to a school</label><label class="opt"><input type="radio" name="phr3" value="B"> <b>B.</b> to a club</label><label class="opt"><input type="radio" name="phr3" value="C"> <b>C.</b> to an account</label><label class="opt"><input type="radio" name="phr3" value="D"> <b>D.</b> to a password</label>
+      <div class="feedback"></div>
+    </div>
+<button class="check" onclick="checkMC('phr',['B', 'D', 'B', 'C'],'phrScore',['<b>upload a post</b> = đăng/tải một bài viết lên mạng. “Upload” có thể đi với file, photo, video…; trong các lựa chọn, <i>a post</i> phù hợp nhất.', '<b>browse a website</b> = duyệt/xem một trang web. “Browse” thường dùng khi xem nội dung trên website.', '<b>check a notification</b> = kiểm tra một thông báo.', '<b>log on to an account</b> = đăng nhập vào một tài khoản. Cấu trúc: <i>log on to + account/system</i>.'])">Check Answers</button>
+<span class="score" id="phrScore">Score: 0 / 4</span>
+</section><section class="section" id="wordbox">
+<h2>3. Vocabulary – Word Box</h2>
+<div class="wordbox"><b>expectation · bully · forum · coach · concentrate · pressure · improve</b></div>
+<p class="instruction">Choose the correct word. Click an answer — no typing required.</p>
+
+<div class="q" id="wordbox-0">
+<div class="qtitle">1. To meet her parents' ______, she spends five hours practising the piano every day.</div>
+<label class="opt"><input type="radio" name="wordbox0" value="A"> <b>A.</b> expectations</label>
+<label class="opt"><input type="radio" name="wordbox0" value="B"> <b>B.</b> pressure</label>
+<label class="opt"><input type="radio" name="wordbox0" value="C"> <b>C.</b> forum</label>
+<label class="opt"><input type="radio" name="wordbox0" value="D"> <b>D.</b> bully</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="wordbox-1">
+<div class="qtitle">2. It's not a problem for the contestants to work under ______.</div>
+<label class="opt"><input type="radio" name="wordbox1" value="A"> <b>A.</b> pressure</label>
+<label class="opt"><input type="radio" name="wordbox1" value="B"> <b>B.</b> expectation</label>
+<label class="opt"><input type="radio" name="wordbox1" value="C"> <b>C.</b> concentrate</label>
+<label class="opt"><input type="radio" name="wordbox1" value="D"> <b>D.</b> forum</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="wordbox-2">
+<div class="qtitle">3. Their PE teacher ______ them after school every day.</div>
+<label class="opt"><input type="radio" name="wordbox2" value="A"> <b>A.</b> improves</label>
+<label class="opt"><input type="radio" name="wordbox2" value="B"> <b>B.</b> coaches</label>
+<label class="opt"><input type="radio" name="wordbox2" value="C"> <b>C.</b> pressures</label>
+<label class="opt"><input type="radio" name="wordbox2" value="D"> <b>D.</b> bullies</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="wordbox-3">
+<div class="qtitle">4. Stay away from him. He is a big ______ at our school.</div>
+<label class="opt"><input type="radio" name="wordbox3" value="A"> <b>A.</b> coach</label>
+<label class="opt"><input type="radio" name="wordbox3" value="B"> <b>B.</b> forum</label>
+<label class="opt"><input type="radio" name="wordbox3" value="C"> <b>C.</b> bully</label>
+<label class="opt"><input type="radio" name="wordbox3" value="D"> <b>D.</b> expectation</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="wordbox-4">
+<div class="qtitle">5. I started playing chess two months ago, and I can ______ better now than before.</div>
+<label class="opt"><input type="radio" name="wordbox4" value="A"> <b>A.</b> concentrate</label>
+<label class="opt"><input type="radio" name="wordbox4" value="B"> <b>B.</b> improve</label>
+<label class="opt"><input type="radio" name="wordbox4" value="C"> <b>C.</b> coach</label>
+<label class="opt"><input type="radio" name="wordbox4" value="D"> <b>D.</b> bully</label>
+<div class="feedback"></div></div>
+
+<button class="check" onclick="checkMC('wordbox',['A','A','B','C','A'],'wordboxScore',[
+'<b>expectations</b> = những kỳ vọng. The phrase “meet someone’s expectations” means đáp ứng kỳ vọng của ai đó.',
+'<b>pressure</b> = áp lực. “work under pressure” means làm việc dưới áp lực.',
+'<b>coaches</b> = huấn luyện. A PE teacher coaches students in sports.',
+'<b>bully</b> = kẻ bắt nạt. “a big bully” refers to someone who often frightens or hurts others.',
+'<b>concentrate</b> = tập trung. “concentrate better” means có thể tập trung tốt hơn.'
+])">Check Answers</button>
+<span class="score" id="wordboxScore">Score: 0 / 5</span>
+</section><section class="section">
+<h2>4. Cloze – Social media</h2>
+<div class="passage"><p>Nam was a good student. But he started using a smartphone and spending too much time on (1) _____ like Facebook and TikTok. He also liked joining in chit-chat and game (2) _____ for teens. He spent a lot of time (3) _____ notifications. He even neglected his schoolwork, and stopped (4) _____ with his classmates, friends, and family members. One day Nam saw a video clip about a boy who was addicted to games, and had no friends, so when the boy was feeling down, he (5) _____ others. Nam realised that he also had no more friends, except his younger brother.</p></div>
+<div class="q" id="cloze-0">
+      <div class="qtitle">Blank 1</div>
+      <label class="opt"><input type="radio" name="cloze0" value="A"> <b>A.</b> forum</label><label class="opt"><input type="radio" name="cloze0" value="B"> <b>B.</b> social media</label><label class="opt"><input type="radio" name="cloze0" value="C"> <b>C.</b> website</label><label class="opt"><input type="radio" name="cloze0" value="D"> <b>D.</b> notifications</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="cloze-1">
+      <div class="qtitle">Blank 2</div>
+      <label class="opt"><input type="radio" name="cloze1" value="A"> <b>A.</b> notifications</label><label class="opt"><input type="radio" name="cloze1" value="B"> <b>B.</b> posts</label><label class="opt"><input type="radio" name="cloze1" value="C"> <b>C.</b> forums</label><label class="opt"><input type="radio" name="cloze1" value="D"> <b>D.</b> videos</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="cloze-2">
+      <div class="qtitle">Blank 3</div>
+      <label class="opt"><input type="radio" name="cloze2" value="A"> <b>A.</b> checking</label><label class="opt"><input type="radio" name="cloze2" value="B"> <b>B.</b> posting</label><label class="opt"><input type="radio" name="cloze2" value="C"> <b>C.</b> uploading</label><label class="opt"><input type="radio" name="cloze2" value="D"> <b>D.</b> browsing</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="cloze-3">
+      <div class="qtitle">Blank 4</div>
+      <label class="opt"><input type="radio" name="cloze3" value="A"> <b>A.</b> browsing</label><label class="opt"><input type="radio" name="cloze3" value="B"> <b>B.</b> logging on</label><label class="opt"><input type="radio" name="cloze3" value="C"> <b>C.</b> communicating</label><label class="opt"><input type="radio" name="cloze3" value="D"> <b>D.</b> coaching</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="cloze-4">
+      <div class="qtitle">Blank 5</div>
+      <label class="opt"><input type="radio" name="cloze4" value="A"> <b>A.</b> bullied</label><label class="opt"><input type="radio" name="cloze4" value="B"> <b>B.</b> connected</label><label class="opt"><input type="radio" name="cloze4" value="C"> <b>C.</b> helped</label><label class="opt"><input type="radio" name="cloze4" value="D"> <b>D.</b> joined</label>
+      <div class="feedback"></div>
+    </div>
+<button class="check" onclick="checkMC('cloze',['B', 'C', 'A', 'C', 'A'],'clozeScore',['“spending too much time on <b>social media</b> like Facebook and TikTok” là cụm tự nhiên và đúng nghĩa.', '“joined in chit-chat and game <b>forums</b> for teens” = tham gia các diễn đàn trò chuyện và trò chơi dành cho thanh thiếu niên.', 'Sau “stopped” cần V-ing. <b>checking notifications</b> = kiểm tra thông báo.', '“stopped <b>communicating</b> with his classmates, friends, and family members” = ngừng giao tiếp với…', 'Cậu bé trong video bị bắt nạt và cảm thấy buồn, vì vậy Nam <b>realised that he also had no more friends</b> except his younger brother; đáp án của bài là <b>bullied</b>.'])">Check Answers</button>
+<span class="score" id="clozeScore">Score: 0 / 5</span>
+</section><section class="section">
+<h2>5. Linking words</h2><p class="instruction">Underline the correct word to complete each sentence.</p>
+<div class="q" id="conn-0">
+<div class="qtitle">1. Some teenagers never join in any forums for help, (so / because) they prefer talking to their parents about their problems.</div>
+<label class="opt"><input type="radio" name="conn0" value="A"> <b>A.</b> because</label>
+<label class="opt"><input type="radio" name="conn0" value="B"> <b>B.</b> so</label>
+<div class="feedback"></div></div><div class="q" id="conn-1">
+<div class="qtitle">2. In some forums teens can get advice from peers; (therefore / however), my friends often use those forums to share their problems.</div>
+<label class="opt"><input type="radio" name="conn1" value="A"> <b>A.</b> therefore</label>
+<label class="opt"><input type="radio" name="conn1" value="B"> <b>B.</b> however</label>
+<div class="feedback"></div></div><div class="q" id="conn-2">
+<div class="qtitle">3. Many teenagers want to support needy people, (but / so) they join community service projects.</div>
+<label class="opt"><input type="radio" name="conn2" value="A"> <b>A.</b> so</label>
+<label class="opt"><input type="radio" name="conn2" value="B"> <b>B.</b> but</label>
+<div class="feedback"></div></div><div class="q" id="conn-3">
+<div class="qtitle">4. Our students can participate in any club they like, (but / or) they shouldn't try to join all the school clubs at the same time.</div>
+<label class="opt"><input type="radio" name="conn3" value="A"> <b>A.</b> but</label>
+<label class="opt"><input type="radio" name="conn3" value="B"> <b>B.</b> or</label>
+<div class="feedback"></div></div><div class="q" id="conn-4">
+<div class="qtitle">5. Minh told his teachers about the school bullies; (therefore / otherwise), the bullies wouldn't leave him alone.</div>
+<label class="opt"><input type="radio" name="conn4" value="A"> <b>A.</b> therefore</label>
+<label class="opt"><input type="radio" name="conn4" value="B"> <b>B.</b> otherwise</label>
+<div class="feedback"></div></div>
+<button class="check" onclick="checkMC('conn',['A','A','A','A','B'],'connScore',['<b>because</b> chỉ nguyên nhân: họ không tham gia diễn đàn <i>vì</i> họ thích nói chuyện với bố mẹ.', '<b>therefore</b> = do đó/vì vậy, thể hiện kết quả. Dấu chấm phẩy trước nó cũng phù hợp.', '<b>so</b> = vì vậy, thể hiện kết quả: muốn giúp người khó khăn → tham gia dự án cộng đồng.', '<b>but</b> = nhưng, nối hai ý tương phản.', '<b>otherwise</b> = nếu không thì. Nghĩa là nếu Minh không nói với giáo viên, những kẻ bắt nạt sẽ không để Minh yên.'])">Check Answers</button>
+<span class="score" id="connScore">Score: 0 / 5</span>
+</section><section class="section">
+<h2>6. Grammar – Conjunctions</h2>
+<div class="q" id="mcq-0">
+      <div class="qtitle">1. Teenagers need encouragement from their parents, _____ not all parents are willing to encourage their children.</div>
+      <label class="opt"><input type="radio" name="mcq0" value="A"> <b>A.</b> for</label><label class="opt"><input type="radio" name="mcq0" value="B"> <b>B.</b> and</label><label class="opt"><input type="radio" name="mcq0" value="C"> <b>C.</b> but</label><label class="opt"><input type="radio" name="mcq0" value="D"> <b>D.</b> so</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="mcq-1">
+      <div class="qtitle">2. Many girls worry about their appearance, _____ they often look at themselves in a mirror.</div>
+      <label class="opt"><input type="radio" name="mcq1" value="A"> <b>A.</b> but</label><label class="opt"><input type="radio" name="mcq1" value="B"> <b>B.</b> so</label><label class="opt"><input type="radio" name="mcq1" value="C"> <b>C.</b> or</label><label class="opt"><input type="radio" name="mcq1" value="D"> <b>D.</b> for</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="mcq-2">
+      <div class="qtitle">3. To have more companions, teenagers should learn to mix with their classmates, _____ they can try to get on with their siblings.</div>
+      <label class="opt"><input type="radio" name="mcq2" value="A"> <b>A.</b> so</label><label class="opt"><input type="radio" name="mcq2" value="B"> <b>B.</b> for</label><label class="opt"><input type="radio" name="mcq2" value="C"> <b>C.</b> or</label><label class="opt"><input type="radio" name="mcq2" value="D"> <b>D.</b> yet</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="mcq-3">
+      <div class="qtitle">4. Social media helps teens connect with others; _____, they also cause teens to feel lonely.</div>
+      <label class="opt"><input type="radio" name="mcq3" value="A"> <b>A.</b> however</label><label class="opt"><input type="radio" name="mcq3" value="B"> <b>B.</b> therefore</label><label class="opt"><input type="radio" name="mcq3" value="C"> <b>C.</b> otherwise</label><label class="opt"><input type="radio" name="mcq3" value="D"> <b>D.</b> although</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="mcq-4">
+      <div class="qtitle">5. They spend a lot of time surfing the net; _____, they have little time to read books.</div>
+      <label class="opt"><input type="radio" name="mcq4" value="A"> <b>A.</b> however</label><label class="opt"><input type="radio" name="mcq4" value="B"> <b>B.</b> therefore</label><label class="opt"><input type="radio" name="mcq4" value="C"> <b>C.</b> although</label><label class="opt"><input type="radio" name="mcq4" value="D"> <b>D.</b> otherwise</label>
+      <div class="feedback"></div>
+    </div>
+<button class="check" onclick="checkMC('mcq',['C', 'B', 'A', 'A', 'B'],'mcqScore',['<b>but</b> diễn tả sự tương phản: thanh thiếu niên cần sự động viên, <i>nhưng</i> không phải bố mẹ nào cũng sẵn sàng động viên.', '<b>so</b> diễn tả kết quả: lo lắng về ngoại hình → vì vậy thường soi gương.', '<b>so</b> = vì vậy. Ý sau là kết quả/định hướng từ việc hòa nhập với bạn cùng lớp.', '<b>however</b> = tuy nhiên, thể hiện sự tương phản giữa lợi ích và tác động tiêu cực.', '<b>therefore</b> = vì vậy/do đó. Dành nhiều thời gian lướt mạng → có ít thời gian đọc sách.'])">Check Answers</button>
+<span class="score" id="mcqScore">Score: 0 / 5</span>
+</section><section class="section">
+<h2>7. Everyday English – Exchanges</h2>
+<p class="instruction">Sometimes you can choose two answers.</p>
+<div class="q" id="ex-0">
+      <div class="qtitle">1. Tom: How about playing a game of chess? – Mai: _____.</div>
+      <label class="opt"><input type="radio" name="ex0" value="A"> <b>A.</b> No, that's a waste of time.</label><label class="opt"><input type="radio" name="ex0" value="B"> <b>B.</b> I'd love to. But I have to finish my homework first</label><label class="opt"><input type="radio" name="ex0" value="C"> <b>C.</b> Chess is interesting to play</label><label class="opt"><input type="radio" name="ex0" value="D"> <b>D.</b> I'm sorry. Don't ask me to do that</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="ex-1">
+      <div class="qtitle">2. Mai: _____? – Ann: Yes, certainly.</div>
+      <label class="opt"><input type="radio" name="ex1" value="A"> <b>A.</b> Can I join you in this game</label><label class="opt"><input type="radio" name="ex1" value="B"> <b>B.</b> Will I join you in this game</label><label class="opt"><input type="radio" name="ex1" value="C"> <b>C.</b> Shall you join us in this game</label><label class="opt"><input type="radio" name="ex1" value="D"> <b>D.</b> Should you join us in this game</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="ex-2">
+      <div class="qtitle">3. Nick: Could you tell me how I can deal with a bully? – Mi: _____.</div>
+      <label class="opt"><input type="radio" name="ex2" value="A"> <b>A.</b> That's very kind of you. Thanks</label><label class="opt"><input type="radio" name="ex2" value="B"> <b>B.</b> Who's he? I don't know him</label><label class="opt"><input type="radio" name="ex2" value="C"> <b>C.</b> You should talk to your parents about him</label><label class="opt"><input type="radio" name="ex2" value="D"> <b>D.</b> You shouldn't talk to your parents about him</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="ex-3">
+      <div class="qtitle">4. Teacher: Would you like to discuss the causes of your in our forum? – Student: _____.</div>
+      <label class="opt"><input type="radio" name="ex3" value="A"> <b>A.</b> No, I wouldn't</label><label class="opt"><input type="radio" name="ex3" value="B"> <b>B.</b> That's a good idea</label><label class="opt"><input type="radio" name="ex3" value="C"> <b>C.</b> Yes, I would join the forum</label><label class="opt"><input type="radio" name="ex3" value="D"> <b>D.</b> That's very kind of you</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="ex-4">
+      <div class="qtitle">5. Minh: _____? – Tom: Certainly. Go past this building, then turn left. It's right in front of you there.</div>
+      <label class="opt"><input type="radio" name="ex4" value="A"> <b>A.</b> Would you show me the way to the library, please</label><label class="opt"><input type="radio" name="ex4" value="B"> <b>B.</b> Could you show me the way to the library, please</label><label class="opt"><input type="radio" name="ex4" value="C"> <b>C.</b> Should you show me the way to the library, please</label><label class="opt"><input type="radio" name="ex4" value="D"> <b>D.</b> May you show me the way to the library, please</label>
+      <div class="feedback"></div>
+    </div>
+<button class="check" onclick="checkMC('ex',['B', 'A', 'C', 'C', 'B'],'exScore',['B phù hợp nhất: Mai đồng ý với lời mời nhưng nói mình phải hoàn thành bài tập trước.', 'A là câu hỏi xin phép: <b>Can I join you…?</b> → Ann có thể trả lời “Yes, certainly.”', 'C là lời khuyên phù hợp: <b>You should talk to your parents about him.</b>', 'C phù hợp vì học sinh chấp nhận lời mời tham gia diễn đàn để thảo luận.', 'B là cách hỏi đường lịch sự và tự nhiên: <b>Could you show me the way…?</b>'])">Check Answers</button>
+<span class="score" id="exScore">Score: 0 / 5</span>
+</section><section class="section" id="reading1">
+<h2>8. Reading – School club activities</h2>
+<p class="instruction"><b>Read the passage and choose the correct answer A, B, C, or D to fill in each blank.</b></p>
+<p class="instruction">(Đọc đoạn văn và chọn đáp án đúng A, B, C hoặc D để điền vào mỗi chỗ trống.)</p>
+
+<div class="reading-box">
+<div class="reading en">
+<h3>English passage</h3>
+<p>
+Studies have proven that school club activities are important to both the physical and mental development of children.
+In sports clubs, kids play sports regularly, and under the guidance of their (1) <span class="blank">______</span>, they improve their physical health.
+Moreover, children mix with friends from different classes in a new (2) <span class="blank">______</span> where they can learn, share, and appreciate each other.
+Also, when they work with new friends in a club, they will become more confident and independent.
+Furthermore, when children work together in a (3) <span class="blank">______</span> to deal with a problem or do tasks, they have to work together to think about what they should do to (4) <span class="blank">______</span> the task.
+They, therefore, can learn research and leadership (5) <span class="blank">______</span>.
+Many kids also find good role (6) <span class="blank">______</span> in clubs, such as coaches or group leaders.
+</p>
+</div>
+
+<div class="reading vi">
+<h3>Bản dịch tiếng Việt</h3>
+<p>
+Các nghiên cứu đã chứng minh rằng hoạt động câu lạc bộ ở trường học rất quan trọng đối với sự phát triển cả về thể chất và tinh thần của trẻ em.
+Trong các câu lạc bộ thể thao, trẻ thường xuyên chơi thể thao và dưới sự hướng dẫn của các huấn luyện viên, các em cải thiện sức khỏe thể chất.
+Hơn nữa, trẻ em giao lưu với bạn bè từ các lớp khác nhau trong một môi trường mới, nơi các em có thể học hỏi, chia sẻ và trân trọng lẫn nhau.
+Ngoài ra, khi làm việc với những người bạn mới trong câu lạc bộ, các em sẽ trở nên tự tin và độc lập hơn.
+Hơn nữa, khi trẻ cùng nhau làm việc theo nhóm để giải quyết một vấn đề hoặc thực hiện nhiệm vụ, các em phải cùng suy nghĩ xem cần làm gì để hoàn thành nhiệm vụ.
+Vì vậy, các em có thể học được kỹ năng nghiên cứu và lãnh đạo.
+Nhiều trẻ cũng tìm thấy những hình mẫu tốt trong các câu lạc bộ, chẳng hạn như huấn luyện viên hoặc trưởng nhóm.
+</p>
+</div>
+</div>
+
+<div class="q" id="read1-0">
+<div class="qtitle">1. Choose the word for blank (1).</div>
+<label class="opt"><input type="radio" name="read10" value="A"> <b>A.</b> coaches</label>
+<label class="opt"><input type="radio" name="read10" value="B"> <b>B.</b> trainees</label>
+<label class="opt"><input type="radio" name="read10" value="C"> <b>C.</b> monitors</label>
+<label class="opt"><input type="radio" name="read10" value="D"> <b>D.</b> peers</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="read1-1">
+<div class="qtitle">2. Choose the word for blank (2).</div>
+<label class="opt"><input type="radio" name="read11" value="A"> <b>A.</b> surrounding</label>
+<label class="opt"><input type="radio" name="read11" value="B"> <b>B.</b> atmosphere</label>
+<label class="opt"><input type="radio" name="read11" value="C"> <b>C.</b> neighbourhood</label>
+<label class="opt"><input type="radio" name="read11" value="D"> <b>D.</b> environment</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="read1-2">
+<div class="qtitle">3. Choose the word for blank (3).</div>
+<label class="opt"><input type="radio" name="read12" value="A"> <b>A.</b> group</label>
+<label class="opt"><input type="radio" name="read12" value="B"> <b>B.</b> team</label>
+<label class="opt"><input type="radio" name="read12" value="C"> <b>C.</b> band</label>
+<label class="opt"><input type="radio" name="read12" value="D"> <b>D.</b> gang</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="read1-3">
+<div class="qtitle">4. Choose the word for blank (4).</div>
+<label class="opt"><input type="radio" name="read13" value="A"> <b>A.</b> complete</label>
+<label class="opt"><input type="radio" name="read13" value="B"> <b>B.</b> make</label>
+<label class="opt"><input type="radio" name="read13" value="C"> <b>C.</b> do</label>
+<label class="opt"><input type="radio" name="read13" value="D"> <b>D.</b> create</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="read1-4">
+<div class="qtitle">5. Choose the word for blank (5).</div>
+<label class="opt"><input type="radio" name="read14" value="A"> <b>A.</b> knowledge</label>
+<label class="opt"><input type="radio" name="read14" value="B"> <b>B.</b> skills</label>
+<label class="opt"><input type="radio" name="read14" value="C"> <b>C.</b> tasks</label>
+<label class="opt"><input type="radio" name="read14" value="D"> <b>D.</b> jobs</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="read1-5">
+<div class="qtitle">6. Choose the word for blank (6).</div>
+<label class="opt"><input type="radio" name="read15" value="A"> <b>A.</b> idols</label>
+<label class="opt"><input type="radio" name="read15" value="B"> <b>B.</b> figures</label>
+<label class="opt"><input type="radio" name="read15" value="C"> <b>C.</b> models</label>
+<label class="opt"><input type="radio" name="read15" value="D"> <b>D.</b> names</label>
+<div class="feedback"></div></div>
+
+<button class="check" onclick="checkMC('read1',['A','D','B','A','B','C'],'read1Score',[
+'“under the guidance of their <b>coaches</b>” = dưới sự hướng dẫn của các huấn luyện viên.',
+'“a new <b>environment</b> where they can learn, share…” = một môi trường mới.',
+'“work together in a <b>team</b> to deal with a problem” là cụm từ tự nhiên.',
+'“<b>complete the task</b>” = hoàn thành nhiệm vụ.',
+'“research and leadership <b>skills</b>” = kỹ năng nghiên cứu và lãnh đạo.',
+'“good role <b>models</b>” = những hình mẫu tốt để noi theo.'
+])">Check Answers</button>
+<span class="score" id="read1Score">Score: 0 / 6</span>
+</section><section class="section">
+<h2>9. Reading – Conversation about confidence</h2>
+<div class="pair"><div class="reading en"><h3>English conversation</h3><p>Ms Kate: Hi Vy. Why don't you join with your classmates in playing shuttlecock over there?<br><br>Vy: I'd like to. But they may not want me to join.<br><br>Ms Kate: Have you asked them yet?<br><br>Vy: I'm pretty sure that they will not let me join. They laugh at me in our maths class. I don't like maths, and I'm not good at it.<br><br>Ms Kate: Alright, Vy. So what subjects are you interested in?<br><br>Vy: English and history. I love reading about things that happened in the past. I can read in English, and I easily remember events.<br><br>Ms Kate: Wow. Not everyone does well in those subjects. You should be proud of that. So, you want to become a historian?<br><br>Vy: Definitely, Miss. But my classmates all laughed at me when I told them.<br><br>Ms Kate: Don't be nervous, Vy. You should be more confident in your abilities and don't be afraid to show others what you can do. I'll start a discussion in the school forum about respect soon ...</p></div><div class="reading vi"><h3>Bản dịch tiếng Việt</h3><p>Cô Kate: Chào Vy. Tại sao em không tham gia chơi đá cầu với các bạn cùng lớp ở đằng kia?<br><br>Vy: Em muốn. Nhưng họ có thể không muốn em tham gia.<br><br>Cô Kate: Em đã hỏi họ chưa?<br><br>Vy: Em khá chắc chắn rằng họ sẽ không cho em tham gia. Họ cười nhạo em trong lớp toán. Em không thích toán và em không giỏi môn đó.<br><br>Cô Kate: Được rồi, Vy. Vậy em hứng thú với môn học nào?<br><br>Vy: Tiếng Anh và lịch sử. Em thích đọc về những điều đã xảy ra trong quá khứ. Em có thể đọc bằng tiếng Anh và em dễ dàng ghi nhớ các sự kiện.<br><br>Cô Kate: Chà. Không phải ai cũng học tốt những môn đó. Em nên tự hào về điều đó. Vậy em muốn trở thành một nhà sử học?<br><br>Vy: Chắc chắn rồi, thưa cô. Nhưng các bạn cùng lớp của em đều cười em khi em nói với họ.<br><br>Cô Kate: Đừng căng thẳng, Vy. Em nên tự tin hơn vào khả năng của mình và đừng ngại cho người khác thấy em có thể làm được gì. Cô sẽ sớm bắt đầu một cuộc thảo luận trong diễn đàn của trường về sự tôn trọng...</p></div></div>
+<div class="q" id="tf-0">
+<div class="qtitle">1. Vy doesn't want to join her classmates.</div>
+<label class="opt"><input type="radio" name="tf0" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf0" value="F"> <b>False</b></label>
+<div class="feedback"></div></div><div class="q" id="tf-1">
+<div class="qtitle">2. Vy has problems with maths.</div>
+<label class="opt"><input type="radio" name="tf1" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf1" value="F"> <b>False</b></label>
+<div class="feedback"></div></div><div class="q" id="tf-2">
+<div class="qtitle">3. English and history are her favourite subjects.</div>
+<label class="opt"><input type="radio" name="tf2" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf2" value="F"> <b>False</b></label>
+<div class="feedback"></div></div><div class="q" id="tf-3">
+<div class="qtitle">4. Her dream is to become a historian.</div>
+<label class="opt"><input type="radio" name="tf3" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf3" value="F"> <b>False</b></label>
+<div class="feedback"></div></div><div class="q" id="tf-4">
+<div class="qtitle">5. Vy’s classmates don’t think highly of her.</div>
+<label class="opt"><input type="radio" name="tf4" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf4" value="F"> <b>False</b></label>
+<div class="feedback"></div></div><div class="q" id="tf-5">
+<div class="qtitle">6. Vy is a confident student.</div>
+<label class="opt"><input type="radio" name="tf5" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf5" value="F"> <b>False</b></label>
+<div class="feedback"></div></div><div class="q" id="tf-6">
+<div class="qtitle">7. Ms Kate advised Vy to be calm and to prove her abilities.</div>
+<label class="opt"><input type="radio" name="tf6" value="T"> <b>True</b></label>
+<label class="opt"><input type="radio" name="tf6" value="F"> <b>False</b></label>
+<div class="feedback"></div></div>
+<button class="check" onclick="checkMC('tf',['F', 'T', 'T', 'T', 'T', 'F', 'T'],'tfScore',["Sai. Vy nói “I'd like to” – em muốn tham gia, nhưng lo các bạn không cho em tham gia.", 'Đúng. Vy nói các bạn cười em trong giờ toán và em không thích toán, không giỏi môn này.', 'Đúng. Vy nói rõ: “English and history. I love reading about things that happened in the past.”', 'Đúng. Khi cô Kate hỏi, Vy trả lời “Definitely” – chắc chắn em muốn trở thành nhà sử học.', 'Đúng theo thông tin trong bài: các bạn cười Vy khi em nói về ước mơ, cho thấy họ chưa đánh giá cao/ủng hộ em.', 'Sai. Cô Kate khuyên Vy nên tự tin hơn vào khả năng của mình, vì vậy hiện tại Vy chưa thực sự tự tin.', 'Đúng. Cô Kate nói “Don’t be nervous” và khuyên Vy tự tin, không ngại cho người khác thấy những gì em có thể làm.'])">Check Answers</button>
+<span class="score" id="tfScore">Score: 0 / 7</span>
+</section><section class="section">
+<h2>10. Reading – Bright Stars Middle School Daily Bulletin</h2>
+<div class="pair"><div class="reading en"><h3>English bulletin</h3><pre>BRIGHT STARS MIDDLE SCHOOL
+DAILY BULLETIN
+
+Monday, 10th October, 2025
+
+Preliminary English Test
+PET registration begins on Tuesday, 11th October and the test will be on 20th October. Please sign up before the 15th. Make sure you all have a good night's sleep before the test day. Your results will be available on the 25th.
+
+Link Team is currently receiving applications for the next school year. If you want to help our new juniors, then Link Team is for you. Come to Room 201 after school to pick up an application.
+
+Sports
+Swimming: Attention 8th and 9th grade students. If you plan to join the Swimming Club, come to Room 303 to sign up. Or contact Mr Linh at thaylinhswimming@quickmail.com.
+Jogging: Attention all students. Please check the email we sent you yesterday. It's an application to join the school's charity jogging event. If you are interested in joining, please fill in the application before Thursday. Thank you!
+
+Clubs
+Photo Club: Only two weeks left to grab your camera or smartphone, guys. Get ready for this year's photo contest. Ask your art teacher for an entry form.
+Chess Club: Open next month. The club will meet on Saturday mornings, from 8:00 a.m. to 11:00 a.m. Contact Mr Tung for applications at 0843757522.</pre></div><div class="reading vi"><h3>Bản dịch tiếng Việt</h3><p>TRƯỜNG TRUNG HỌC CƠ SỞ BRIGHT STARS<br><br>BẢN TIN HẰNG NGÀY<br><br><br><br>Thứ hai, ngày 10 tháng 10 năm 2025<br><br><br><br>Kiểm tra tiếng Anh sơ bộ<br><br>Đăng ký PET bắt đầu vào thứ Ba, ngày 11 tháng 10 và kỳ thi sẽ diễn ra vào ngày 20 tháng 10. Vui lòng đăng ký trước ngày 15. Hãy đảm bảo rằng tất cả các em có một giấc ngủ ngon trước ngày thi. Kết quả của các em sẽ có vào ngày 25.<br><br><br><br>Nhóm Link hiện đang nhận đơn đăng ký cho năm học tiếp theo. Nếu bạn muốn giúp đỡ các học sinh mới của chúng tôi thì Link Team là dành cho bạn. Hãy đến Phòng 201 sau giờ học để nhận đơn.<br><br><br><br>Các môn thể thao<br><br>Bơi lội: Chú ý học sinh lớp 8 và lớp 9. Nếu bạn định tham gia Câu lạc bộ Bơi lội, hãy đến Phòng 303 để đăng ký. Hoặc liên hệ thầy Linh.<br><br>Chạy bộ: Chú ý tất cả học sinh. Vui lòng kiểm tra email chúng tôi đã gửi cho bạn ngày hôm qua. Đó là đơn đăng ký tham gia sự kiện chạy bộ từ thiện của trường. Nếu muốn tham gia, vui lòng điền đơn trước thứ Năm.<br><br><br><br>Câu lạc bộ<br><br>Câu lạc bộ Ảnh: Chỉ còn hai tuần để chuẩn bị máy ảnh hoặc điện thoại thông minh. Hãy sẵn sàng cho cuộc thi ảnh năm nay. Hãy hỏi giáo viên mỹ thuật để lấy mẫu đơn đăng ký.<br><br>Câu lạc bộ Cờ vua: Khai trương vào tháng tới. Câu lạc bộ sẽ gặp nhau vào các buổi sáng thứ Bảy, từ 8 giờ đến 11 giờ.</p></div></div>
+<div class="q" id="bullet-0">
+      <div class="qtitle">1. Bright Stars Middle School sends a bulletin _____.</div>
+      <label class="opt"><input type="radio" name="bullet0" value="A"> <b>A.</b> every day</label><label class="opt"><input type="radio" name="bullet0" value="B"> <b>B.</b> very week</label><label class="opt"><input type="radio" name="bullet0" value="C"> <b>C.</b> each month</label><label class="opt"><input type="radio" name="bullet0" value="D"> <b>D.</b> yearly</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="bullet-1">
+      <div class="qtitle">2. Students have to sign up for PET between _____.</div>
+      <label class="opt"><input type="radio" name="bullet1" value="A"> <b>A.</b> 11th and 14th</label><label class="opt"><input type="radio" name="bullet1" value="B"> <b>B.</b> 12th and 15th</label><label class="opt"><input type="radio" name="bullet1" value="C"> <b>C.</b> 11th and 15th</label><label class="opt"><input type="radio" name="bullet1" value="D"> <b>D.</b> 20th and 25th</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="bullet-2">
+      <div class="qtitle">3. Link Team helps students who _____.</div>
+      <label class="opt"><input type="radio" name="bullet2" value="A"> <b>A.</b> are going to leave the school</label><label class="opt"><input type="radio" name="bullet2" value="B"> <b>B.</b> are going to enter the school</label><label class="opt"><input type="radio" name="bullet2" value="C"> <b>C.</b> are school students and have problems</label><label class="opt"><input type="radio" name="bullet2" value="D"> <b>D.</b> left school but have problems</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="bullet-3">
+      <div class="qtitle">4. The Swimming Club is for _____.</div>
+      <label class="opt"><input type="radio" name="bullet3" value="A"> <b>A.</b> all students except 8th and 9th grade students</label><label class="opt"><input type="radio" name="bullet3" value="B"> <b>B.</b> 8th grade students only</label><label class="opt"><input type="radio" name="bullet3" value="C"> <b>C.</b> all 8th and 9th grade students</label><label class="opt"><input type="radio" name="bullet3" value="D"> <b>D.</b> 9th grade students only</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="bullet-4">
+      <div class="qtitle">5. Students can join the charity jogging event by _____.</div>
+      <label class="opt"><input type="radio" name="bullet4" value="A"> <b>A.</b> replying to the email</label><label class="opt"><input type="radio" name="bullet4" value="B"> <b>B.</b> completing the application</label><label class="opt"><input type="radio" name="bullet4" value="C"> <b>C.</b> calling the office</label><label class="opt"><input type="radio" name="bullet4" value="D"> <b>D.</b> attending an interview</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="bullet-5">
+      <div class="qtitle">6. The photo contest will _____.</div>
+      <label class="opt"><input type="radio" name="bullet5" value="A"> <b>A.</b> finish in two weeks</label><label class="opt"><input type="radio" name="bullet5" value="B"> <b>B.</b> not require registration</label><label class="opt"><input type="radio" name="bullet5" value="C"> <b>C.</b> be only for students with cameras</label><label class="opt"><input type="radio" name="bullet5" value="D"> <b>D.</b> take place in two weeks</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="bullet-6">
+      <div class="qtitle">7. When will the Chess Club be open? _____.</div>
+      <label class="opt"><input type="radio" name="bullet6" value="A"> <b>A.</b> This Saturday.</label><label class="opt"><input type="radio" name="bullet6" value="B"> <b>B.</b> In November.</label><label class="opt"><input type="radio" name="bullet6" value="C"> <b>C.</b> From 9:00 a.m.</label><label class="opt"><input type="radio" name="bullet6" value="D"> <b>D.</b> In October.</label>
+      <div class="feedback"></div>
+    </div>
+<button class="check" onclick="checkMC('bullet',['A', 'C', 'B', 'C', 'B', 'D', 'B'],'bulletScore',['Tiêu đề là <b>DAILY BULLETIN</b> → bản tin được phát hành hằng ngày.', 'Thông báo: đăng ký bắt đầu ngày 11/10 và phải đăng ký trước ngày 15/10 → <b>11th and 15th</b>.', 'Bản tin nói Link Team nhận đơn cho năm học tiếp theo và giúp “our new juniors” → học sinh sắp vào trường.', 'Thông báo ghi rõ: “Attention 8th and 9th grade students.”', 'Học sinh phải điền đơn đăng ký trước thứ Năm → <b>completing the application</b>.', "“Only two weeks left to grab your camera or smartphone… Get ready for this year's photo contest.” → cuộc thi sẽ diễn ra trong hai tuần tới.", 'Bản tin ngày 10/10 nói “Chess Club: Open next month” → tháng 11.'])">Check Answers</button>
+<span class="score" id="bulletScore">Score: 0 / 7</span>
+</section><section class="section" id="write">
+<h2>11. Sentence Making – Multiple Choice</h2>
+<p class="instruction">Choose the sentence that is grammatically correct and matches the given words.</p>
+
+<div class="q" id="write-0">
+<div class="qtitle">1. Teenagers / should / play / sport / keep fit.</div>
+<label class="opt"><input type="radio" name="write0" value="A"> <b>A.</b> Teenagers should playing sports to keep fit.</label>
+<label class="opt"><input type="radio" name="write0" value="B"> <b>B.</b> Teenagers should play some sports to keep fit.</label>
+<label class="opt"><input type="radio" name="write0" value="C"> <b>C.</b> Teenagers should to play sports to keep fit.</label>
+<label class="opt"><input type="radio" name="write0" value="D"> <b>D.</b> Teenagers should played sport to keep fit.</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="write-1">
+<div class="qtitle">2. Teens / may / feel stressed / classmates / do better / at school.</div>
+<label class="opt"><input type="radio" name="write1" value="A"> <b>A.</b> Teens may feels stressed when their classmates do better than them at school.</label>
+<label class="opt"><input type="radio" name="write1" value="B"> <b>B.</b> Teens may feel stressed when their classmates do better than them at school.</label>
+<label class="opt"><input type="radio" name="write1" value="C"> <b>C.</b> Teens may feel stressing when their classmates does better than them at school.</label>
+<label class="opt"><input type="radio" name="write1" value="D"> <b>D.</b> Teens may to feel stressed when their classmates do better than them at school.</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="write-2">
+<div class="qtitle">3. Some teens / participate / school clubs / make new friends.</div>
+<label class="opt"><input type="radio" name="write2" value="A"> <b>A.</b> Some teens participate in school clubs to make new friends.</label>
+<label class="opt"><input type="radio" name="write2" value="B"> <b>B.</b> Some teens participates in school clubs making new friends.</label>
+<label class="opt"><input type="radio" name="write2" value="C"> <b>C.</b> Some teens participate school clubs for make new friends.</label>
+<label class="opt"><input type="radio" name="write2" value="D"> <b>D.</b> Some teens participating in school clubs to made new friends.</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="write-3">
+<div class="qtitle">4. Some teens / feel pressure / because / want / fit in a group.</div>
+<label class="opt"><input type="radio" name="write3" value="A"> <b>A.</b> Some teens feel pressure because they want fit in a group.</label>
+<label class="opt"><input type="radio" name="write3" value="B"> <b>B.</b> Some teens feels pressure because they want to fitting in a group.</label>
+<label class="opt"><input type="radio" name="write3" value="C"> <b>C.</b> Some teens feel pressure because they want to fit in a group.</label>
+<label class="opt"><input type="radio" name="write3" value="D"> <b>D.</b> Some teens feeling pressure because they want to fit in a group.</label>
+<div class="feedback"></div></div>
+
+<div class="q" id="write-4">
+<div class="qtitle">5. Main causes / teen stress / include / peer pressure / schoolwork pressure / pressure from parents.</div>
+<label class="opt"><input type="radio" name="write4" value="A"> <b>A.</b> The main causes of teen stress includes peer pressure, schoolwork pressure, and pressure from parents.</label>
+<label class="opt"><input type="radio" name="write4" value="B"> <b>B.</b> The main causes of teen stress include peer pressure, schoolwork pressure, and pressure from parents.</label>
+<label class="opt"><input type="radio" name="write4" value="C"> <b>C.</b> The main causes of teen stress including peer pressure, schoolwork pressure, and pressure from parents.</label>
+<label class="opt"><input type="radio" name="write4" value="D"> <b>D.</b> The main cause of teen stress include peer pressure, schoolwork pressure, and pressure from parents.</label>
+<div class="feedback"></div></div>
+
+<button class="check" onclick="checkMC('write',['B','B','A','C','B'],'writeScore',[
+'<b>should + V nguyên mẫu</b>: should play. “keep fit” = giữ cơ thể khỏe mạnh.',
+'<b>may + V nguyên mẫu</b>: may feel. “do better than” = làm tốt hơn.',
+'<b>participate in</b> = tham gia; <b>to + V</b> chỉ mục đích.',
+'<b>feel pressure</b> và <b>want to + V</b> là cấu trúc đúng.',
+'<b>causes</b> là chủ ngữ số nhiều nên dùng <b>include</b>.'
+])">Check Answers</button>
+<span class="score" id="writeScore">Score: 0 / 5</span>
+</section>
+<section class="section">
+<h2>12. Closest in meaning – Paraphrasing</h2>
+<div class="q" id="para-0">
+      <div class="qtitle">1. I'm interested in participating in some club activities.</div>
+      <label class="opt"><input type="radio" name="para0" value="A"> <b>A.</b> Joining in some club activities is not my interest.</label><label class="opt"><input type="radio" name="para0" value="B"> <b>B.</b> My interest is to joining in some club activities.</label><label class="opt"><input type="radio" name="para0" value="C"> <b>C.</b> I'm interested in joining in some club activities.</label><label class="opt"><input type="radio" name="para0" value="D"> <b>D.</b> Club activities are what I am interested in.</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="para-1">
+      <div class="qtitle">2. I play chess to relax, but I'm now confident enough to enter competitions.</div>
+      <label class="opt"><input type="radio" name="para1" value="A"> <b>A.</b> Although I play chess to relax, but I'm now confident enough to enter competitions.</label><label class="opt"><input type="radio" name="para1" value="B"> <b>B.</b> Although I play chess to relax, I'm now confident enough to enter competitions.</label><label class="opt"><input type="radio" name="para1" value="C"> <b>C.</b> I'm now confident enough to enter competitions in spite of being relaxed.</label><label class="opt"><input type="radio" name="para1" value="D"> <b>D.</b> I play chess to relax, and I'm now confident enough to enter competitions.</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="para-2">
+      <div class="qtitle">3. Teenagers join the Teen Line forum as they enjoy chatting with other teens.</div>
+      <label class="opt"><input type="radio" name="para2" value="A"> <b>A.</b> Teenagers join the Teen Line forum, so they enjoy chatting with other teens.</label><label class="opt"><input type="radio" name="para2" value="B"> <b>B.</b> Teenagers join the Teen Line forum although they enjoy chatting with other teens.</label><label class="opt"><input type="radio" name="para2" value="C"> <b>C.</b> Teenagers join the Teen Line forum, but they enjoy chatting with other teens.</label><label class="opt"><input type="radio" name="para2" value="D"> <b>D.</b> Teenagers join the Teen Line forum because they enjoy chatting with other teens.</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="para-3">
+      <div class="qtitle">4. Although teens don't know how to avoid bullies, they don't want to tell their teachers.</div>
+      <label class="opt"><input type="radio" name="para3" value="A"> <b>A.</b> If teens knew how to avoid bullies, they would not tell their teachers.</label><label class="opt"><input type="radio" name="para3" value="B"> <b>B.</b> Teens don't know how to avoid bullies, but they don't want to tell their teachers.</label><label class="opt"><input type="radio" name="para3" value="C"> <b>C.</b> Teens will tell their teachers although they know how to avoid bullies.</label><label class="opt"><input type="radio" name="para3" value="D"> <b>D.</b> Teens know how to avoid bullies; however, they will tell their teachers.</label>
+      <div class="feedback"></div>
+    </div><div class="q" id="para-4">
+      <div class="qtitle">5. If you don't stop spending so much time playing video games, you will get addicted.</div>
+      <label class="opt"><input type="radio" name="para4" value="A"> <b>A.</b> You should stop spending so much time playing video games; otherwise, you will get addicted.</label><label class="opt"><input type="radio" name="para4" value="B"> <b>B.</b> You should stop spending so much time playing video games; however, you will get addicted.</label><label class="opt"><input type="radio" name="para4" value="C"> <b>C.</b> Stop spending so much time playing video games, so you will get addicted.</label><label class="opt"><input type="radio" name="para4" value="D"> <b>D.</b> Although you stop spending so much time playing video games, you will get addicted.</label>
+      <div class="feedback"></div>
+    </div>
+<button class="check" onclick="checkMC('para',['C', 'B', 'D', 'B', 'A'],'paraScore',['C gần nghĩa nhất vì giữ nguyên ý “tôi quan tâm/hứng thú với việc tham gia một số hoạt động câu lạc bộ”.', 'B dùng <b>Although</b> đúng cấu trúc: Although + mệnh đề, mệnh đề. Không dùng “although … but …”.', '<b>as</b> ở câu gốc mang nghĩa “because” → đáp án D giữ nguyên quan hệ nguyên nhân.', 'B giữ nguyên hai ý: không biết cách tránh bắt nạt + không muốn nói với giáo viên. “Although” thể hiện tương phản, phù hợp với “but”.', '<b>otherwise</b> = nếu không thì, diễn tả đúng điều kiện “Nếu bạn không dừng… thì bạn sẽ nghiện”.'])">Check Answers</button>
+<span class="score" id="paraScore">Score: 0 / 5</span>
+</section>
+<section class="section"><h2>📌 Grammar summary</h2>
+<ul>
+<li><b>but</b> = nhưng → tương phản.</li>
+<li><b>so</b> = vì vậy → kết quả.</li>
+<li><b>because</b> = bởi vì → nguyên nhân.</li>
+<li><b>therefore</b> = do đó/vì vậy → kết quả, thường đứng sau dấu chấm phẩy hoặc đầu câu.</li>
+<li><b>however</b> = tuy nhiên → tương phản.</li>
+<li><b>otherwise</b> = nếu không thì.</li>
+<li><b>Although + clause, clause</b>. Không dùng đồng thời <i>although ... but ...</i>.</li>
+<li><b>should + V</b> = nên làm gì; <b>may + V</b> = có thể.</li>
+</ul></section>
+</div>
+<div class="final" id="total">Total: 0</div>
+<script>
+const scores={};
+function speakWord(t){
+ if(!('speechSynthesis' in window)){alert('Your browser does not support speech synthesis.');return;}
+ speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.82;speechSynthesis.speak(u);
+}
+function checkMC(group,answers,scoreId,exps){
+ let s=0;
+ answers.forEach((ans,i)=>{
+  let chosen=document.querySelector(`input[name="${group}${i}"]:checked`);
+  let box=document.querySelector(`#${group}-${i}`), fb=box?.querySelector('.feedback');
+  box?.classList.remove('correct','wrong');
+  if(chosen && chosen.value===ans){s++;box.classList.add('correct');fb.className='feedback show ok';fb.innerHTML='<b>✓ Correct</b><br>'+exps[i];}
+  else{box.classList.add('wrong');fb.className='feedback show no';fb.innerHTML='<b>✗ Chưa đúng.</b> Đáp án đúng: <b>'+ans+'</b><br>'+exps[i];}
+ });
+ document.getElementById(scoreId).textContent='Score: '+s+' / '+answers.length;scores[scoreId]=[s,answers.length];updateTotal();
+}
+function updateTotal(){
+ let s=0,m=0;Object.values(scores).forEach(x=>{s+=x[0];m+=x[1]});document.getElementById('total').textContent='Total: '+s+' / '+m;
+}
+</script>
+</body></html>
